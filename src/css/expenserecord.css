@@ -1,51 +1,218 @@
 /* src/css/expenserecord.css */
 .expense-record-container {
-    padding: 10px;
+    padding: 10px; /* Tighter padding for mobile */
     background: #f8f8f8;
     min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch; /* iOS smoothness */
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
   
-  .expense-record-card { /* unchanged */ }
-  .expense-record-card h2 { /* unchanged */ }
-  .expense-form { /* unchanged */ }
-  .expense-form-grid { /* unchanged */ }
-  .form-group { /* unchanged */ }
+  .expense-record-card {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Full width on mobile */
+    max-width: 360px; /* Cap for small screens */
+  }
+  
+  .expense-record-card h2 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    font-size: 18px; /* Slightly smaller for mobile */
+  }
+  
+  .expense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* Tighter gap */
+  }
+  
+  .expense-form-grid {
+    display: block; /* Stack everything */
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px; /* Smaller margin */
+  }
   
   .expense-form input[type="text"],
   .expense-form input[type="date"],
   .expense-form input[type="number"],
   .expense-form textarea {
-    padding: 6px;
+    padding: 6px; /* Smaller padding */
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 12px; /* Smaller font */
     width: 100%;
-    -webkit-appearance: none; /* Normalize iOS */
   }
   
-  .expense-form label { /* unchanged */ }
-  .checkbox-group { /* unchanged */ }
-  .checkbox-group input[type="checkbox"] { /* unchanged */ }
-  .checkbox-group label { /* unchanged */ }
-  .gst-input { /* unchanged */ }
-  .form-actions { /* unchanged */ }
-  .save-expense-button { /* unchanged */ }
-  .save-expense-button:hover:not(:disabled) { /* unchanged */ }
-  .save-expense-button:disabled { /* unchanged */ }
-  .button-loading { /* unchanged */ }
-  .save-expense-button .activate-wrapper { /* unchanged */ }
-  .save-expense-button .activate { /* unchanged */ }
-  .back-button { /* unchanged */ }
-  .back-button:hover:not(.disabled) { /* unchanged */ }
-  .back-button.disabled { /* unchanged */ }
-  .data-grid { /* unchanged */ }
-  .expense-data-table { /* unchanged */ }
-  .expense-data-table th { /* unchanged */ }
-  .expense-data-table td { /* unchanged */ }
-  .expense-data-table tbody { /* unchanged */ }
-  .expense-data-table tbody tr { /* unchanged */ }
-  .expense-data-table td::before { /* unchanged */ }
-  .expense-data-table td { /* unchanged */ }
-  .expense-data-table tbody tr:nth-child(odd) { /* unchanged */ }
+  .expense-form label {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  
+  .checkbox-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+  }
+  
+  .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .gst-input {
+    width: 40%; /* Even smaller for mobile */
+  }
+  
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  
+  .save-expense-button {
+    padding: 8px;
+    background-color: #5628ee;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease, opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  .save-expense-button:hover:not(:disabled) {
+    background-color: #451fd9;
+  }
+  
+  .save-expense-button:disabled {
+    background-color: #5628ee;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .button-loading {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .save-expense-button .activate-wrapper {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .save-expense-button .activate {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .back-button {
+    padding: 8px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .back-button:hover:not(.disabled) {
+    background-color: #444;
+  }
+  
+  .back-button.disabled {
+    background-color: #e0e0e0;
+    color: #999;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .data-grid {
+    margin-top: 1rem;
+    overflow-x: hidden; /* No horizontal scroll */
+  }
+  
+  .expense-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+  
+  .expense-data-table th,
+  .expense-data-table td {
+    font-size: 11px; /* Smaller font for mobile */
+    text-align: left;
+    padding: 6px;
+    border: 1px solid #ddd;
+  }
+  
+  .expense-data-table th {
+    font-weight: 600;
+    display: none; /* Hidden on mobile */
+  }
+  
+  .expense-data-table tbody {
+    display: block;
+    max-height: 150px; /* Smaller height for mobile */
+    overflow-y: auto;
+  }
+  
+  .expense-data-table tbody tr {
+    display: block;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .expense-data-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .expense-data-table tr td:last-child {
+    border-bottom: none;
+  }
+  
+  .expense-data-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #333;
+    margin-right: 0.5rem;
+  }
+  
+  .expense-data-table td {
+    text-align: right;
+  }
+  
+  .expense-data-table tbody tr:nth-child(odd) {
+    background-color: #fcfcfc;
+  }

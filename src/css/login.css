@@ -15,25 +15,88 @@
     min-height: 100vh;
     -webkit-overflow-scrolling: touch;
   }
-  
-  .login-container { /* unchanged */ }
-  .loginForm { /* unchanged */ }
-  .loginForm h1 { /* unchanged */ }
-  .loginForm p { /* unchanged */ }
-  .inputWrapper { /* unchanged */ }
-  
-  .inputWrapper input {
+
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: 8px 6px 8px 30px; /* Adjusted padding */
-    font-size: 14px;
-    border: 1px solid #d8ddf0;
-    border-radius: 6px;
-    transition: border-color 250ms ease-in;
-    -webkit-appearance: none; /* Remove iOS default styling */
   }
   
-  .inputWrapper input:focus { /* unchanged */ }
-  .inputWrapper input:focus + .icon { /* unchanged */ }
-  .icon { /* unchanged */ }
-  .submitButton { /* unchanged */ }
-  .submitButton:hover { /* unchanged */ }
+  .loginForm {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow:
+      rgba(74, 79, 97, 0.25) 0px 13px 27px -5px,
+      rgba(74, 79, 97, 0.3) 0px 8px 16px -8px;
+    padding: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+  }
+  
+  .loginForm h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 15px 0 5px;
+  }
+  
+  .loginForm p {
+    color: #a4a9b6;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .inputWrapper {
+    position: relative;
+    margin-bottom: 15px;
+  }
+  
+.inputWrapper input {
+  width: 100%;
+  padding: 8px 6px 8px 30px; /* Adjusted padding */
+  font-size: 14px;
+  border: 1px solid #d8ddf0;
+  border-radius: 6px;
+  transition: border-color 250ms ease-in;
+  -webkit-appearance: none; /* Remove iOS default styling */
+  appearance: none; /* Standard property for compatibility */
+}
+  
+  .inputWrapper input:focus {
+    outline: none;
+    border-color: #4c70ff;
+  }
+  
+  .inputWrapper input:focus + .icon {
+    color: #4c70ff;
+  }
+  
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #a4a9b6;
+    pointer-events: none;
+  }
+  
+  .submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    background: #4c70ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .submitButton:hover {
+    background: #3a5fd3;
+  }
