@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  background: #FFF; /* Matches welcome screen */
+}
+
+h1 {
+  font-size: 2em; /* Smaller for mobile */
+  line-height: 1.1;
+}
+
+p {
+  font-size: 1rem;
+}

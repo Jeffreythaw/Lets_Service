@@ -1,0 +1,51 @@
+/* src/css/expenserecord.css */
+.expense-record-container {
+    padding: 10px;
+    background: #f8f8f8;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* iOS smoothness */
+  }
+  
+  .expense-record-card { /* unchanged */ }
+  .expense-record-card h2 { /* unchanged */ }
+  .expense-form { /* unchanged */ }
+  .expense-form-grid { /* unchanged */ }
+  .form-group { /* unchanged */ }
+  
+  .expense-form input[type="text"],
+  .expense-form input[type="date"],
+  .expense-form input[type="number"],
+  .expense-form textarea {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 100%;
+    -webkit-appearance: none; /* Normalize iOS */
+  }
+  
+  .expense-form label { /* unchanged */ }
+  .checkbox-group { /* unchanged */ }
+  .checkbox-group input[type="checkbox"] { /* unchanged */ }
+  .checkbox-group label { /* unchanged */ }
+  .gst-input { /* unchanged */ }
+  .form-actions { /* unchanged */ }
+  .save-expense-button { /* unchanged */ }
+  .save-expense-button:hover:not(:disabled) { /* unchanged */ }
+  .save-expense-button:disabled { /* unchanged */ }
+  .button-loading { /* unchanged */ }
+  .save-expense-button .activate-wrapper { /* unchanged */ }
+  .save-expense-button .activate { /* unchanged */ }
+  .back-button { /* unchanged */ }
+  .back-button:hover:not(.disabled) { /* unchanged */ }
+  .back-button.disabled { /* unchanged */ }
+  .data-grid { /* unchanged */ }
+  .expense-data-table { /* unchanged */ }
+  .expense-data-table th { /* unchanged */ }
+  .expense-data-table td { /* unchanged */ }
+  .expense-data-table tbody { /* unchanged */ }
+  .expense-data-table tbody tr { /* unchanged */ }
+  .expense-data-table td::before { /* unchanged */ }
+  .expense-data-table td { /* unchanged */ }
+  .expense-data-table tbody tr:nth-child(odd) { /* unchanged */ }
