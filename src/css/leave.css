@@ -1,5 +1,5 @@
-/* src/css/dashboard.css */
-.dashboard-container {
+/* src/css/leave.css */
+.leave-container {
     height: 100vh;
     width: 100vw;
     background: #f8f8f8;
@@ -10,7 +10,7 @@
     font-family: 'Poppins', sans-serif;
   }
   
-  .dashboard-header {
+  .leave-header {
     background: #5628ee;
     color: #fff;
     padding: 10px;
@@ -18,61 +18,66 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
   }
   
-  .dashboard-header h1 {
+  .leave-header h1 {
     font-size: 18px;
     margin: 0;
   }
   
-  .dashboard-header p {
-    font-size: 12px;
-    margin: 5px 0 0;
+  .leave-content {
+    padding: 10px;
   }
   
-  .logout-button {
-    background: #ff4444;
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    font-size: 12px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    max-width: 300px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .form-group textarea {
+    height: 80px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  .form-actions button {
+    padding: 8px 16px;
+    background: #5628ee;
     color: #fff;
     border: none;
-    padding: 6px 12px;
     border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
     font-size: 12px;
+    cursor: pointer;
   }
   
-  .logout-button:hover {
-    background: #cc3333;
+  .form-actions button:hover {
+    background: #451fd9;
   }
   
-  .logout-icon {
-    font-size: 14px;
-  }
-  
-  .dashboard-content {
-    flex: 1;
-    padding: 10px;
-  }
-  
-  .chart-section {
-    background: #fff;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .chart-section h2 {
-    font-size: 14px;
-    margin: 0 0 10px;
-    color: #333;
-  }
-  
+  /* Same Nav Bar Styles */
   .nav-bar {
     position: fixed;
     bottom: 0;
@@ -86,11 +91,7 @@
     align-items: center;
     z-index: 10;
   }
-  
-  input[type="radio"] {
-    display: none;
-  }
-  
+  input[type="radio"] { display: none; }
   .nav-icon {
     display: flex;
     flex-direction: column;
@@ -98,7 +99,7 @@
     color: #9b8f8f;
     cursor: pointer;
     transition: color 0.3s ease;
-    width: 16.66%;
+    width: 16.66%; /* 6 items */
     padding: 5px 0;
   }
   
@@ -111,16 +112,18 @@
     font-size: 10px;
     transition: opacity 0.3s ease;
   }
-  
   input[id="dashboard"]:checked + .dashboard,
   input[id="attendance"]:checked + .attendance,
   input[id="leave"]:checked + .leave,
   input[id="projects"]:checked + .projects,
   input[id="complaints"]:checked + .complaints,
-  input[id="employee"]:checked + .employee {
-    color: #5628ee;
-  }
-  
+  input[id="employee"]:checked + .employee { color: #5628ee; }
+  input[id="dashboard"]:checked + .dashboard .nav-title,
+  input[id="attendance"]:checked + .attendance .nav-title,
+  input[id="leave"]:checked + .leave .nav-title,
+  input[id="projects"]:checked + .projects .nav-title,
+  input[id="complaints"]:checked + .complaints .nav-title,
+  input[id="employee"]:checked + .employee .nav-title { opacity: 1; transform: translateY(0); }
   .nav-effect {
     position: absolute;
     bottom: 0;
@@ -131,7 +134,6 @@
     transition: transform 0.3s ease;
     z-index: 0;
   }
-  
   input[id="dashboard"]:checked ~ .nav-effect { transform: translateX(-250%); }
   input[id="attendance"]:checked ~ .nav-effect { transform: translateX(-150%); }
   input[id="leave"]:checked ~ .nav-effect { transform: translateX(-50%); }

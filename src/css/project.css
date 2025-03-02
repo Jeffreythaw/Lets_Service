@@ -1,5 +1,5 @@
-/* src/css/attendance.css */
-.attendance-container {
+/* src/css/project.css */
+.project-container {
     height: 100vh;
     width: 100vw;
     background: #f8f8f8;
@@ -10,7 +10,7 @@
     font-family: 'Poppins', sans-serif;
   }
   
-  .attendance-header {
+  .project-header {
     background: #5628ee;
     color: #fff;
     padding: 10px;
@@ -20,13 +20,87 @@
     z-index: 20;
   }
   
-  .attendance-header h1 {
+  .project-header h1 {
     font-size: 18px;
     margin: 0;
   }
   
-  .attendance-content {
-    padding: 10px;
+  .project-content {
+    padding: 10px 10px 70px; /* Bottom padding for nav-bar */
+    flex: 1;
+  }
+  
+  .control-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .control-container button {
+    padding: 8px 16px;
+    background: #5628ee;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .control-container button:hover {
+    background: #451fd9;
+  }
+  
+  .project-content p {
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .data-grid {
+    margin: 10px 0;
+  }
+  
+  .project-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    font-size: 11px;
+  }
+  
+  .project-data-table td {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+  }
+  
+  .project-data-table tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .project-data-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #5628ee;
+    margin-right: 5px;
+    text-align: left;
+    flex: 1;
+  }
+  
+  .project-data-table tr:nth-child(even) {
+    background: #f9f9f9;
+  }
+  
+  .form-container {
+    padding-bottom: 70px; /* Ensure buttons are above nav-bar */
+  }
+  
+  .form-grid {
+    display: block;
   }
   
   .form-group {
@@ -40,7 +114,8 @@
     margin-bottom: 5px;
   }
   
-  .form-group input {
+  .form-group input,
+  .form-group textarea {
     width: 100%;
     max-width: 300px;
     padding: 6px;
@@ -49,6 +124,10 @@
     font-size: 12px;
     display: block;
     margin: 0 auto;
+  }
+  
+  .form-group textarea {
+    height: 80px;
   }
   
   .form-actions {
@@ -68,22 +147,19 @@
     cursor: pointer;
   }
   
-  .form-actions button:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
-  
-  .form-actions button:hover:not(:disabled) {
+  .form-actions button:hover {
     background: #451fd9;
   }
   
-  .attendance-content p {
-    font-size: 12px;
-    color: #333;
-    text-align: center;
+  .form-actions button:nth-child(2) {
+    background: #999;
   }
   
-  /* Same Nav Bar Styles */
+  .form-actions button:nth-child(2):hover {
+    background: #777;
+  }
+  
+  /* Navigation Bar */
   .nav-bar {
     position: fixed;
     bottom: 0;
@@ -97,7 +173,9 @@
     align-items: center;
     z-index: 10;
   }
+  
   input[type="radio"] { display: none; }
+  
   .nav-icon {
     display: flex;
     flex-direction: column;
@@ -105,7 +183,7 @@
     color: #9b8f8f;
     cursor: pointer;
     transition: color 0.3s ease;
-    width: 16.66%; /* 6 items */
+    width: 16.66%;
     padding: 5px 0;
   }
   
@@ -118,18 +196,21 @@
     font-size: 10px;
     transition: opacity 0.3s ease;
   }
+  
   input[id="dashboard"]:checked + .dashboard,
   input[id="attendance"]:checked + .attendance,
   input[id="leave"]:checked + .leave,
   input[id="projects"]:checked + .projects,
   input[id="complaints"]:checked + .complaints,
   input[id="employee"]:checked + .employee { color: #5628ee; }
+  
   input[id="dashboard"]:checked + .dashboard .nav-title,
   input[id="attendance"]:checked + .attendance .nav-title,
   input[id="leave"]:checked + .leave .nav-title,
   input[id="projects"]:checked + .projects .nav-title,
   input[id="complaints"]:checked + .complaints .nav-title,
   input[id="employee"]:checked + .employee .nav-title { opacity: 1; transform: translateY(0); }
+  
   .nav-effect {
     position: absolute;
     bottom: 0;
@@ -140,6 +221,7 @@
     transition: transform 0.3s ease;
     z-index: 0;
   }
+  
   input[id="dashboard"]:checked ~ .nav-effect { transform: translateX(-250%); }
   input[id="attendance"]:checked ~ .nav-effect { transform: translateX(-150%); }
   input[id="leave"]:checked ~ .nav-effect { transform: translateX(-50%); }

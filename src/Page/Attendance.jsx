@@ -1,105 +1,155 @@
 // src/Page/Attendance.jsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/attendance.css";
-import { FaHome, FaMoneyBillWave, FaClipboardList, FaUser } from "react-icons/fa";
+import { FaHome, FaMoneyBillWave, FaClipboardList, FaUser, FaFolder, FaExclamationTriangle } from "react-icons/fa";
 
 const Attendance = () => {
   const navigate = useNavigate();
-  const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbwxVpMPkatGvpS6r4UfOoDnXOJ-Z_wfByIu6vMJtj3Mnrn8yGHFNv4Tx0y_qon52gV9/exec"; // Replace with your actual script ID
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbwxVpMPkatGvpS6r4UfOoDnXOJ-Z_wfByIu6vMJtj3Mnrn8yGHFNv4Tx0y_qon52gV9/exec"; // Same as employee's script
+  const employeeName = localStorage.getItem("username") || "admin";
+  const role = localStorage.getItem("role");
 
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [form, setForm] = useState({ 
+    date: new Date().toISOString().split("T")[0], 
+    projectIn: "", 
+    timeIn: "", 
+    timeOut: "" 
+  });
   const [activeTab, setActiveTab] = useState("attendance");
 
-  // Format date to DD-MMM-YYYY
-  const formatDate = (dateInput) => {
-    if (!dateInput) return "N/A";
-    const date = new Date(dateInput);
-    if (isNaN(date.getTime())) return "N/A";
-    return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    async function fetchAttendanceData() {
-      try {
-        setLoading(true);
-        const response = await fetch(`${scriptUrl}?action=getAttendance`);
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const json = await response.json();
-        setAttendanceRecords(json.records || []);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
+  const handleClockIn = async () => {
+    const data = { 
+      action: "clockIn", 
+      "Date": form.date, 
+      "ProjectIn": form.projectIn, 
+      "TimeIn": new Date().toLocaleTimeString(), 
+      "user": employeeName 
+    };
+    try {
+      console.log("Clock in data:", JSON.stringify(data));
+      await fetch(scriptUrl, { 
+        method: "POST", 
+        mode: "no-cors", 
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      });
+      setForm((prev) => ({ ...prev, timeIn: data["TimeIn"] }));
+      alert("Clocked in successfully!");
+    } catch (error) {
+      console.error("Clock in error:", error.message);
+      alert("Error clocking in.");
     }
-    fetchAttendanceData();
-  }, []);
+  };
+
+  const handleClockOut = async () => {
+    const data = { 
+      action: "clockOut", 
+      "Date": form.date, 
+      "ProjectOut": form.projectIn, 
+      "TimeOut": new Date().toLocaleTimeString(), 
+      "user": employeeName 
+    };
+    try {
+      console.log("Clock out data:", JSON.stringify(data));
+      await fetch(scriptUrl, { 
+        method: "POST", 
+        mode: "no-cors", 
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      });
+      setForm((prev) => ({ ...prev, timeOut: data["TimeOut"] }));
+      alert("Clocked out successfully!");
+    } catch (error) {
+      console.error("Clock out error:", error.message);
+      alert("Error clocking out.");
+    }
+  };
 
   const handleNavigation = (tab, path) => {
     setActiveTab(tab);
-    if (path) navigate(path);
+    if (path && (role === "admin" || ["attendance", "leave-apply", "complaints"].includes(path.split("/")[1]))) {
+      navigate(path);
+    }
   };
 
   return (
     <div className="attendance-container">
+      <div className="attendance-header">
+        <h1>Attendance</h1>
+      </div>
       <div className="attendance-content">
-        <h1>Attendance Records</h1>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : attendanceRecords.length > 0 ? (
-          <div className="data-grid">
-            <table className="attendance-data-table">
-              <tbody>
-                {attendanceRecords.map((record, index) => (
-                  <tr key={index}>
-                    <td data-label="Date">{formatDate(record["Date"])}</td>
-                    <td data-label="Employee">{record["Employee Name"] || "N/A"}</td>
-                    <td data-label="Time In">{record["Time In"] || "N/A"}</td>
-                    <td data-label="Time Out">{record["Time Out"] || "N/A"}</td>
-                    <td data-label="Project">{record["Project"] || "N/A"}</td>
-                    <td data-label="Total Hours">{record["Total Hours"] || "N/A"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p>No attendance records found.</p>
-        )}
+        <div className="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value={form.date} onChange={handleChange} />
+        </div>
+        <div className="form-group">
+          <label>Project</label>
+          <input 
+            type="text" 
+            name="projectIn" 
+            value={form.projectIn} 
+            onChange={handleChange} 
+            placeholder="Enter project name" 
+          />
+        </div>
+        <div className="form-actions">
+          <button onClick={handleClockIn} disabled={form.timeIn}>Clock In</button>
+          <button onClick={handleClockOut} disabled={!form.timeIn || form.timeOut}>Clock Out</button>
+        </div>
+        {form.timeIn && <p>Time In: {form.timeIn}</p>}
+        {form.timeOut && <p>Time Out: {form.timeOut}</p>}
       </div>
 
-      {/* Navigation Bar */}
       <div className="nav-bar">
-        <input type="radio" id="home" name="nav" checked={activeTab === "home"} />
-        <label htmlFor="home" className="nav-icon home" onClick={() => handleNavigation("home", "/dashboard")}>
+        <label htmlFor="dashboard" className="nav-icon dashboard" onClick={() => handleNavigation("dashboard", "/dashboard")}>
           <FaHome className="icon" />
-          <span className="nav-title">Home</span>
+          <span className="nav-title">Dashboard</span>
         </label>
+        <input type="radio" id="dashboard" name="nav" checked={activeTab === "dashboard"} />
 
-        <input type="radio" id="expenses" name="nav" checked={activeTab === "expenses"} />
-        <label htmlFor="expenses" className="nav-icon expenses" onClick={() => handleNavigation("expenses", "/expense-record")}>
-          <FaMoneyBillWave className="icon" />
-          <span className="nav-title">Expenses</span>
-        </label>
-
-        <input type="radio" id="attendance" name="nav" checked={activeTab === "attendance"} />
         <label htmlFor="attendance" className="nav-icon attendance" onClick={() => handleNavigation("attendance", "/attendance")}>
           <FaClipboardList className="icon" />
           <span className="nav-title">Attendance</span>
         </label>
+        <input type="radio" id="attendance" name="nav" checked={activeTab === "attendance"} />
 
-        <input type="radio" id="employee" name="nav" checked={activeTab === "employee"} />
-        <label htmlFor="employee" className="nav-icon employee" onClick={() => handleNavigation("employee", "/employee")}>
-          <FaUser className="icon" />
-          <span className="nav-title">Employee</span>
+        <label htmlFor="leave" className="nav-icon leave" onClick={() => handleNavigation("leave", "/leave-apply")}>
+          <FaMoneyBillWave className="icon" />
+          <span className="nav-title">Leave</span>
         </label>
+        <input type="radio" id="leave" name="nav" checked={activeTab === "leave"} />
+
+        {role === "admin" && (
+          <>
+            <label htmlFor="projects" className="nav-icon projects" onClick={() => handleNavigation("projects", "/projects")}>
+              <FaFolder className="icon" />
+              <span className="nav-title">Projects</span>
+            </label>
+            <input type="radio" id="projects" name="nav" checked={activeTab === "projects"} />
+          </>
+        )}
+
+        <label htmlFor="complaints" className="nav-icon complaints" onClick={() => handleNavigation("complaints", "/complaints")}>
+          <FaExclamationTriangle className="icon" />
+          <span className="nav-title">Complaints</span>
+        </label>
+        <input type="radio" id="complaints" name="nav" checked={activeTab === "complaints"} />
+
+        {role === "admin" && (
+          <>
+            <label htmlFor="employee" className="nav-icon employee" onClick={() => handleNavigation("employee", "/employee")}>
+              <FaUser className="icon" />
+              <span className="nav-title">Employee</span>
+            </label>
+            <input type="radio" id="employee" name="nav" checked={activeTab === "employee"} />
+          </>
+        )}
 
         <div className="nav-effect" />
       </div>
