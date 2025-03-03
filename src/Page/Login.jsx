@@ -18,17 +18,26 @@ const Login = () => {
   const [employeeEmails, setEmployeeEmails] = useState([]);
   const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Start false for faster initial render
 
   const navigate = useNavigate();
   const location = useLocation();
   const loginScriptUrl = "https://script.google.com/macros/s/AKfycbyYE_huQhK1kYXukdTRr0YV-GzQeMm_gOSYAdmTEblkwCGyNHpk-c49pbqIItUax1cp/exec";
   const employeeScriptUrl = "https://script.google.com/macros/s/AKfycbwxVpMPkatGvpS6r4UfOoDnXOJ-Z_wfByIu6vMJtj3Mnrn8yGHFNv4Tx0y_qon52gV9/exec?action=getEmails";
+  const CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes cache timeout
 
   const encryptPassword = (plainPassword) => window.btoa(plainPassword);
   const decryptPassword = (encryptedPassword) => window.atob(encryptedPassword);
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (force = false) => {
+    const cached = JSON.parse(localStorage.getItem("cachedUsers") || "{}");
+    const now = Date.now();
+    if (!force && cached.data && (now - cached.timestamp < CACHE_TIMEOUT)) {
+      console.log("Using cached users");
+      setUsers(cached.data);
+      return;
+    }
+
     const startTime = performance.now();
     try {
       const response = await fetch(`${loginScriptUrl}?action=get`);
@@ -36,6 +45,7 @@ const Login = () => {
       const json = await response.json();
       console.log("Fetched users:", json.records);
       setUsers(json.records || []);
+      localStorage.setItem("cachedUsers", JSON.stringify({ data: json.records || [], timestamp: now }));
       console.log(`fetchUsers took ${(performance.now() - startTime) / 1000} seconds`);
     } catch (error) {
       console.error("Fetch users error:", error.message);
@@ -43,7 +53,15 @@ const Login = () => {
     }
   };
 
-  const fetchEmployeeEmails = async () => {
+  const fetchEmployeeEmails = async (force = false) => {
+    const cached = JSON.parse(localStorage.getItem("cachedEmployeeEmails") || "{}");
+    const now = Date.now();
+    if (!force && cached.data && (now - cached.timestamp < CACHE_TIMEOUT)) {
+      console.log("Using cached employee emails");
+      setEmployeeEmails(cached.data);
+      return;
+    }
+
     const startTime = performance.now();
     try {
       const response = await fetch(employeeScriptUrl);
@@ -51,6 +69,7 @@ const Login = () => {
       const json = await response.json();
       console.log("Fetched employee emails:", json.emails);
       setEmployeeEmails(json.emails || []);
+      localStorage.setItem("cachedEmployeeEmails", JSON.stringify({ data: json.emails || [], timestamp: now }));
       console.log(`fetchEmployeeEmails took ${(performance.now() - startTime) / 1000} seconds`);
     } catch (error) {
       console.error("Fetch employee emails error:", error.message);
@@ -63,9 +82,13 @@ const Login = () => {
       setIsLoading(true);
       await Promise.all([fetchUsers(), fetchEmployeeEmails()]);
       setIsLoading(false);
-      const delay = location.state?.fromLogout ? 500 : 8000; // 500ms after logout
-      const timer = setTimeout(() => setShowLogin(true), delay);
-      return () => clearTimeout(timer);
+      const delay = location.state?.fromLogout ? 0 : 8000; // No delay after logout
+      if (delay > 0) {
+        const timer = setTimeout(() => setShowLogin(true), delay);
+        return () => clearTimeout(timer);
+      } else {
+        setShowLogin(true); // Immediate render after logout
+      }
     };
     loadData();
   }, [location.state]);
@@ -94,7 +117,7 @@ const Login = () => {
       setTimeout(() => {
         localStorage.setItem("authToken", "mocked-jwt-token");
         navigate("/dashboard");
-      }, 2000);
+      }, 1000); // Reduced from 2000ms
     } else {
       console.log("Login failed. Users:", users);
       setMessage("Invalid Employee Name or Password.");
@@ -136,9 +159,9 @@ const Login = () => {
       console.log("Register response (no-cors, no data):", response);
       setMessage("Registration successful! Please log in.");
       setTimeout(async () => {
-        await fetchUsers();
+        await fetchUsers(true); // Force refresh after registration
         toggleMode("login");
-      }, 2000);
+      }, 1000); // Reduced from 2000ms
     } catch (error) {
       console.error("Registration error:", error.message);
       setError("Registration failed: " + error.message);
@@ -167,7 +190,7 @@ const Login = () => {
         headers: { "Content-Type": "application/json" }
       });
       setMessage("A reset token has been sent to your email. Please check your inbox.");
-      setTimeout(() => toggleMode("reset"), 2000);
+      setTimeout(() => toggleMode("reset"), 1000); // Reduced from 2000ms
     } catch (error) {
       console.error("Reset error:", error.message);
       setError(`Error requesting reset: ${error.message}`);
@@ -200,9 +223,9 @@ const Login = () => {
       });
       setMessage("Password reset successful! Please log in.");
       setTimeout(async () => {
-        await fetchUsers();
+        await fetchUsers(true); // Force refresh after reset
         toggleMode("login");
-      }, 2000);
+      }, 1000); // Reduced from 2000ms
     } catch (error) {
       console.error("Reset error:", error.message);
       setError(`Error resetting password: ${error.message}`);
@@ -314,7 +337,7 @@ const Login = () => {
                 </button>
               ) : (
                 <ProgressButton
-                  loadingTime={2000}
+                  loadingTime={1000} // Reduced from 2000ms
                   onComplete={() => setIsProcessing(false)}
                   startProgressImmediately={true}
                 />
